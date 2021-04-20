@@ -9,17 +9,17 @@ The Python script is called _Elections_scraper.py_. It is designed to be started
 **For OS Windows, the input command looks like this example (do not forget to type them as string and to use the space for their division): _>python Elections_scraper.py "https://volby.cz/pls/ps2017nss/ps32?xjazyk=CZ&xkraj=5&xnumnuts=4101" "Elections.csv"_**
 
 ## More about the input parameters...
-For the second parameter, which is the _.csv file_, there are no specialties. Only the general rules for the allowed and forbidden characters must be followed. And obviously there must be an appendix .csv in the file name. 
 
 The first parameter is the _URL of the webpage, from which we want to scrap the data_. In fact, there are 2 requirements on this parameter:
 **1) The URL must contain the constant part _'https://volby.cz/pls/ps2017nss/'_**
 **2) Behind the constant part, there must be a query, which links into the web page with elections results for a given area, like _'ps32?xjazyk=CZ&xkraj=2&xnumnuts=2102'_**
-
 The most certain way is to copy the whole links from the web pages, of sure.
 
-## ...And even more about the first input parameter
+For the second parameter, which is the _.csv file_, there are no specialties. Only the general rules for the allowed and forbidden characters must be followed. And obviously, there must be an appendix .csv in the file name. 
 
-There are no limits regarding the choice of the area for the scrapping, using the script. However, due to the structure of the web pages, there are 2 types of the link that can be found (and used). 
+## ...and even more about the first input parameter
+
+There are no limits regarding the choice of the area for the scraping, using the script. However, due to the structure of the web pages, there are 2 types of the link that can be found and used. 
 
 ### Input URL is a link to an area (district), without any subdistricts
 Links of this type refers to the summarized results for the chosen district (area), which can be municipality, group of municipalities (district), or even higher districts. Using this kind of link as an input parameter leads to creation of .csv with only one row, containing information about the chosen district only. One can say it is not such a "big wow". Neverheless, in my opinion it is still better compared to writing the numbers down manually.
