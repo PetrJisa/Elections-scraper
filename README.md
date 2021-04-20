@@ -14,6 +14,7 @@ The Python script is called _Elections_scraper.py_. It is designed to be started
 **The first parameter** is the _URL of the webpage, from which we want to scrap the data_. In fact, there are 2 requirements on this parameter:
 
 **1) The URL must contain the constant part _'https://volby.cz/pls/ps2017nss/'_**
+
 **2) Behind the constant part, there must be a query, which links into the web page with elections results for a given area, like _'ps32?xjazyk=CZ&xkraj=2&xnumnuts=2102'_**
 
 The most certain way is to copy the whole links from the web pages, of sure.
@@ -33,6 +34,7 @@ Links of this type refers to the summarized results for the chosen district (are
 Examples of links, belonging to this type: 
 
 Example 1: https://volby.cz/pls/ps2017nss/ps311?xjazyk=CZ&xkraj=2&xobec=534421&xvyber=2102
+
 Example 2: https://volby.cz/pls/ps2017nss/ps311?xjazyk=CZ&xkraj=2&xobec=531057&xokrsek=6&xvyber=2102
 
 ### Input URL is a link to an area (district), where the subdistricts are chosen from
@@ -44,6 +46,7 @@ Using this kind of URL shows the real strenth of the script, because in this cas
 Examples of links, belonging to this type: 
 
 Example 3: https://volby.cz/pls/ps2017nss/ps32?xjazyk=CZ&xkraj=4&xnumnuts=3202
+
 Example 4: https://volby.cz/pls/ps2017nss/ps33?xjazyk=CZ&xkraj=5&xobec=554481
 
 ## Examples
