@@ -70,11 +70,11 @@ def get_table(link: str):
     ''''Creates pandas data frame from data for municipality'''
     return pandas.read_html(link)
 
-def correct_shitty_number(numb) ->int:
-    '''Input is a whole number, given as integer or string
+def correct_shitty_number(numb: str) -> int:
+    '''Input is a whole number, given as string
 Removes the numbers, including string  "\xa0" instead of empty space for thousands
 Numbers in this format are present in the table which is obtained by method pandas.read_html()'''
-    return(int(str(numb.partition("\xa0")[0]) + str(numb.partition("\xa0")[2])))
+    return int("".join(numb.split("\xa0")))
 
 
 def list_of_parties(table) -> list:
