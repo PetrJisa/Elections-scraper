@@ -77,7 +77,7 @@ Numbers in this format are present in the table which is obtained by method pand
     return int("".join(numb.split("\xa0")))
 
 
-def list_of_parties(table) -> list:
+def list_of_parties() -> list:
     '''Generates list of parties that were voted in the district
 It is generated from the pandas.read_html() table from the column 0
 The reason is that the names of parties in column 1 are destroyed due to problems with diacritics'''
@@ -120,24 +120,13 @@ The reason is that the names of parties in column 1 are destroyed due to problem
                'Národ Sobě'
                ]
 
+    return registr
+
+def column_to_list(table, column: int) -> list:
     output_lst = []
 
     for i in range(1, len(table)):
-        for j in table[i].iloc[:, 0].tolist():
-            try:
-                output_lst.append(registr[int(j)])
-            except ValueError:
-                break
-
-    return output_lst
-
-def results_of_parties(table) -> list:
-    '''Returns results (votes) for all candidating parties in the given district'''
-
-    output_lst = []
-
-    for i in range(1, len(table)):
-        for j in table[i].iloc[:, 2].tolist():
+        for j in table[i].iloc[:, column].tolist():
             try:
                 output_lst.append(int(j))
             except ValueError:
@@ -149,17 +138,36 @@ def results_of_parties(table) -> list:
 
     return output_lst
 
+
+def results_of_parties(table) -> list:
+    '''Returns results (votes) for all candidating parties in the given district'''
+
+    all_parties = list_of_parties()
+    results = dict(zip(column_to_list(table, 0), column_to_list(table, 2)))
+
+    output_lst = []
+
+    for i in range(len(all_parties)):
+        if i in results.keys():
+            output_lst.append(results[i])
+        else:
+            output_lst.append(0)
+
+    return output_lst
+
+
 def votes(table) -> tuple:
     '''Returns tuple of delivered votes and valid votes in the given municipality'''
 
     result = [table[0].iat[0, -6], table[0].iat[0, -3], table[0].iat[0, -2]]
     for i in range(len(result)):
-       try:
-           result[i] = int(result[i])
-       except ValueError:
-           result[i] = correct_shitty_number(result[i])
+        try:
+            result[i] = int(result[i])
+        except ValueError:
+            result[i] = correct_shitty_number(result[i])
 
     return tuple(result)
+
 
 def municipality_code(link: str) -> str:
     '''Returns a municipility code from URL, when the municipality is requested'''
@@ -177,11 +185,12 @@ def municipality_code(link: str) -> str:
 
     return result
 
+
 def header(link: str) -> list:
     '''Prepares the header for the output .csv file'''
 
     table = get_table(link)
-    return [*h3_dict(link).keys(), 'Vydané obálky', 'Odevzdané obálky', 'Platné hlasy', *list_of_parties(table)]
+    return [*h3_dict(link).keys(), 'Vydané obálky', 'Odevzdané obálky', 'Platné hlasy', *list_of_parties()]
 
 
 def row(link: str) -> list:
@@ -200,6 +209,7 @@ def rows(all_links: list) -> list:
 
     return result
 
+
 def export_results(first_row: list, other_rows: list, filename: str) -> None:
     '''Exports results to csv file'''
 
@@ -207,11 +217,13 @@ def export_results(first_row: list, other_rows: list, filename: str) -> None:
         csv.writer(file).writerow(first_row)
         csv.writer(file).writerows(other_rows)
 
-scraping_url, output_file = input_with_check(sys.argv[1], sys.argv[2])
-scraping_links = target_links(scraping_url)
+
+scraping_links = target_links()
+output_file = 'Districts.csv'
 csv_header = header(scraping_links[0])
 csv_data = rows(scraping_links)
 export_results(csv_header, csv_data, output_file)
+
 
 
 
