@@ -33,15 +33,15 @@ def target_links(input_url: str) -> list:
     '''Returns list of URLs for every municipality in the district, chosen by the user'''
 
     if 'ps311' not in input_url:
-        a_tags = bs4.BeautifulSoup(requests.get(input_url).text, 'html.parser').body('a')
-        links = [constant_url_part + link.get('href') for link in a_tags if 'vyber' in link.get('href')]
+        if input_url == 'https://volby.cz/pls/ps2017nss/ps3?xjazyk=CZ':
+            links = [f'https://volby.cz/pls/ps2017nss/ps311?xjazyk=CZ&xkraj={i}' for i in range(1, 15)]
+        else:
+            a_tags = bs4.BeautifulSoup(requests.get(input_url).text, 'html.parser').body('a')
+            links = [constant_url_part + link.get('href') for link in a_tags if 'vyber' in link.get('href')]
 
-        # removing duplicates in links that occur from unknown reason (to me)
-        # They are always 'together' so the next for cycle kills them
-        if len(links) > 1:
-            for i in range(len(links) - 1, 0, -1):
-                if links[i] == links[i - 1]:
-                    del links[i]
+            # Removing duplicates
+            if len(links) > 1:
+                links = list(set(links))
     else:
         links = [input_url]
 
@@ -217,9 +217,9 @@ def export_results(first_row: list, other_rows: list, filename: str) -> None:
         csv.writer(file).writerow(first_row)
         csv.writer(file).writerows(other_rows)
 
-
-scraping_links = target_links()
-output_file = 'Districts.csv'
+user_url, user_csv = input_with_check(sys.argv[1], sys.argv[2])
+scraping_links = target_links(user_url)
+output_file = user_csv
 csv_header = header(scraping_links[0])
 csv_data = rows(scraping_links)
 export_results(csv_header, csv_data, output_file)
